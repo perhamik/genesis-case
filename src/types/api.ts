@@ -23,7 +23,7 @@ export type CourseType = {
 	meta: CourseMeta
 }
 
-type LessonType = {
+export type LessonType = {
 	id: string
 	title: string
 	duration: number

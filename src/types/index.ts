@@ -1,2 +1,2 @@
-import type {CourseType, CourseSingleType} from './api'
-export type {CourseType, CourseSingleType}
+import type {CourseType, CourseSingleType, LessonType} from './api'
+export type {CourseType, CourseSingleType, LessonType}

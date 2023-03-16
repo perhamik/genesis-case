@@ -4,6 +4,9 @@ import type {CourseType, CourseSingleType} from '@/src/types'
 
 export const API_PATH = `${process.env.API_URL}/${process.env.API_VERSION}`
 
+export const getPreviewWebp = (path: string) => `${path}/cover.webp`
+export const getPreviewSet = (path: string) => `${getPreviewWebp(path)}, ${path}/cover.png`
+
 export const getAuthToken = async (ctx: GetServerSidePropsContext) => {
 	const auth = await fetch(`${API_PATH}/auth/anonymous?platform=subscriptions`)
 	const res = (await auth.json()) as {token: string}
@@ -51,4 +54,14 @@ export const getCourseInfo = async (ctx: GetServerSidePropsContext) => {
 	const req = await requestCourseInfo(token, id)
 	const data = await req.json()
 	return data as CourseSingleType
+}
+
+export const transformDuration = (duration: number) => {
+	const _h = Math.floor(duration / 3600)
+	const _m = Math.floor((duration - _h * 3600) / 60)
+	const _s = duration % 60
+	const h = _h > 0 ? `${_h}` : ''
+	const m = _m > 10 ? `${_m}` : `0${_m}`
+	const s = _s > 10 ? `${_s}` : `0${_s}`
+	return [h, m, s].filter((item) => !!item).join(':')
 }

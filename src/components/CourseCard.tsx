@@ -1,9 +1,7 @@
 import React from 'react'
 import {Card, Button} from 'react-bootstrap'
+import {getPreviewWebp, getPreviewSet} from '@/src/api'
 import type {CourseType} from '@/src/types'
-
-const getPreviewWebp = (path: string) => `${path}/cover.webp`
-const getPreviewSet = (path: string) => `${getPreviewWebp(path)}, ${path}/cover.png`
 
 export default function CourseCard({data}: {data: CourseType}) {
 	const {id, title, description, previewImageLink} = data
