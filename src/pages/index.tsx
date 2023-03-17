@@ -33,7 +33,7 @@ export default function Home({data}: {data: Array<CourseType>}) {
 			</Head>
 
 			<Container>
-				<Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				<Row className="my-4 row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
 					{!!data &&
 						data.length > 0 &&
 						data.map((course) => (

@@ -13,9 +13,6 @@ class AppDocument extends Document {
 		return (
 			<Html>
 				<Head>
-					<link rel="preconnect" href="https://fonts.googleapis.com" />
-					<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-					{/* <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet" /> */}
 					<link rel="icon" href="/favicon.ico" />
 					<link
 						rel="stylesheet"
@@ -23,6 +20,9 @@ class AppDocument extends Document {
 						integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
 						crossOrigin="anonymous"
 					/>
+					<link
+						rel="stylesheet"
+						href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.min.css"></link>
 				</Head>
 				<body>
 					<Main />

@@ -12,9 +12,14 @@ export default function CourseLayout({data}: {data: CourseSingleType}) {
 	const videoEl = React.useRef<HTMLVideoElement>(null) as React.MutableRefObject<HTMLVideoElement>
 	const {hls, setHls} = React.useContext(AppContext)
 
+	const hlsConfig = {
+		startPosition: 0.4,
+		debug: true,
+	}
+
 	const initHls = (hls: Hls | null, setter: React.Dispatch<React.SetStateAction<Hls | null>>) => {
 		if (hls || !videoEl) return
-		const _hls = new Hls()
+		const _hls = new Hls(hlsConfig)
 		setter(() => _hls)
 	}
 
