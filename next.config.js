@@ -1,16 +1,13 @@
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ */
+
+const nextConfig = {
 	reactStrictMode: true,
-	typescript: {
-		ignoreBuildErrors: true,
-	},
+
 	images: {
-		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'wisey.app',
-				port: '',
-				pathname: '/assets/images/**',
-			},
-		],
+		domains: ['wisey.app'],
 	},
 }
+
+module.exports = nextConfig

@@ -1,6 +1,6 @@
 import {parseCookies, setCookie} from 'nookies'
 import type {GetServerSidePropsContext} from 'next'
-import type {CourseType, CourseSingleType} from '@/src/types'
+import type {CourseType, CourseSingleType, LessonType} from '@/src/types'
 
 export const API_PATH = `${process.env.API_URL}/${process.env.API_VERSION}`
 
@@ -46,6 +46,7 @@ export const getCourseInfo = async (ctx: GetServerSidePropsContext) => {
 	if (!ctx.params || !ctx.params.id) {
 		return {
 			notFound: true,
+			lessons: [],
 		}
 	}
 	const id = typeof ctx.params.id !== 'string' ? ctx.params.id[0] : ctx.params.id
@@ -56,10 +57,20 @@ export const getCourseInfo = async (ctx: GetServerSidePropsContext) => {
 	return data as CourseSingleType
 }
 
+export const checkLessonsAccess = async (list: Array<LessonType>) => {
+	const _list = list.map((lesson) => fetch(lesson.link))
+	const result: Array<number> = []
+	for await (let lesson of _list) {
+		result.push(lesson.status)
+	}
+
+	return result
+}
+
 export const transformDuration = (duration: number) => {
 	const _h = Math.floor(duration / 3600)
 	const _m = Math.floor((duration - _h * 3600) / 60)
-	const _s = duration % 60
+	const _s = (duration % 60) + 1
 	const h = _h > 0 ? `${_h}` : ''
 	const m = _m > 10 ? `${_m}` : `0${_m}`
 	const s = _s > 10 ? `${_s}` : `0${_s}`

@@ -33,6 +33,7 @@ export type LessonType = {
 	link: string
 	previewImageLink: string
 	meta: null
+	available?: boolean
 }
 
 export type CourseSingleType = {
