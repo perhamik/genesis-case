@@ -1,12 +1,9 @@
 import React from 'react'
-import {GetServerSideProps} from 'next'
 import Head from 'next/head'
-import Layout from '@/src/layout'
+import {GetServerSideProps} from 'next'
+import Layout, {CoursesListLayout} from '@/src/layout'
 import {getCoursesList} from '@/src/api'
-
-import {Container, Row, Col} from 'react-bootstrap'
-import {CourseType} from '@/src/types'
-import CourseCard from '@/src/components/CourseCard'
+import type {CourseType} from '@/src/types'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const req = await getCoursesList(ctx)
@@ -31,18 +28,7 @@ export default function Home({data}: {data: Array<CourseType>}) {
 				<meta name="description" content="List of online courses" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-
-			<Container>
-				<Row className="my-4 row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-					{!!data &&
-						data.length > 0 &&
-						data.map((course) => (
-							<Col key={course.id}>
-								<CourseCard data={course} />
-							</Col>
-						))}
-				</Row>
-			</Container>
+			<CoursesListLayout data={data} />
 		</Layout>
 	)
 }

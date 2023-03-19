@@ -1,11 +1,10 @@
 import React from 'react'
 import Head from 'next/head'
-import Layout from '@/src/layout'
+import Layout, {CourseLayout} from '@/src/layout'
 import {GetServerSideProps, GetServerSidePropsContext} from 'next'
 import {getCourseInfo, checkLessonsAccess} from '@/src/api'
 
 import type {CourseSingleType} from '@/src/types'
-import CourseLayout from '@/src/layout/course'
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
 	const {lessons, ..._data} = await getCourseInfo(ctx)

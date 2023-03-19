@@ -6,6 +6,9 @@ export const API_PATH = `${process.env.API_URL}/${process.env.API_VERSION}`
 
 export const getPreviewWebp = (path: string) => `${path}/cover.webp`
 export const getPreviewSet = (path: string) => `${getPreviewWebp(path)}, ${path}/cover.png`
+export const getLessonPreviewWebp = (lesson: LessonType) => `${lesson.previewImageLink}/lesson-${lesson.order}.webp`
+export const getLessonPreviewSet = (lesson: LessonType) =>
+	`${getLessonPreviewWebp(lesson)}, ${lesson.previewImageLink}/lesson-${lesson.order}.png`
 
 export const getAuthToken = async (ctx: GetServerSidePropsContext) => {
 	const auth = await fetch(`${API_PATH}/auth/anonymous?platform=subscriptions`)
@@ -58,10 +61,14 @@ export const getCourseInfo = async (ctx: GetServerSidePropsContext) => {
 }
 
 export const checkLessonsAccess = async (list: Array<LessonType>) => {
-	const _list = list.map((lesson) => fetch(lesson.link))
 	const result: Array<number> = []
-	for await (let lesson of _list) {
-		result.push(lesson.status)
+	for await (let lesson of list) {
+		try {
+			const res = await fetch(lesson.link)
+			result.push(res.status)
+		} catch (err) {
+			console.warn(err)
+		}
 	}
 
 	return result

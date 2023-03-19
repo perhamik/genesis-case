@@ -1,5 +1,5 @@
 import React from 'react'
-import {getPreviewWebp, getPreviewSet, transformDuration} from '@/src/api'
+import {getPreviewWebp, getPreviewSet, transformDuration, getLessonPreviewWebp, getLessonPreviewSet} from '@/src/api'
 
 import {Container, Image, Row, Col, ListGroup} from 'react-bootstrap'
 import type {CourseSingleType, LessonType} from '@/src/types'
@@ -106,6 +106,9 @@ export default function CourseLayout({data}: {data: CourseSingleType}) {
 					<Row className="flex-lg-row-reverse align-items-center g-5">
 						<Col col={10} col-sm={8} col-lg={6}>
 							<Image
+								// didn't work correctly
+								// srcSet={active ? getLessonPreviewSet(active) : getPreviewSet(data.previewImageLink)}
+								// src={active ? getLessonPreviewWebp(active) : getPreviewWebp(data.previewImageLink)}
 								srcSet={getPreviewSet(data.previewImageLink)}
 								src={getPreviewWebp(data.previewImageLink)}
 								className="d-block mx-lg-auto img-fluid"

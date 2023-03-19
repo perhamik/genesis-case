@@ -13,8 +13,8 @@ const RatingStars = ({rating}: {rating: number}) => {
 	return (
 		<div className="d-flex gap-1 justify-content-end">
 			<div className="d-flex" style={{gap: '2px', color: 'var(--bs-orange)'}}>
-				{list.map((star) => (
-					<i className={`bi ${star}`}></i>
+				{list.map((star, _id) => (
+					<i className={`bi ${star}`} key={`${star}_${_id}`}></i>
 				))}
 			</div>
 			<span className="text">{rating}</span>
@@ -54,7 +54,7 @@ export default function CourseCard({data}: {data: CourseType}) {
 				<Button
 					variant="outline-primary"
 					href={`/course/${id}`}
-					style={{width: '75%', alignSelf: 'end', justifySelf: 'center'}}>
+					style={{width: '50%', alignSelf: 'end', justifySelf: 'center'}}>
 					Watch
 				</Button>
 			</Card.Body>
