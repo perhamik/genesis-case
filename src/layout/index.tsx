@@ -1,6 +1,6 @@
 import React from 'react'
 import {ContextProvider} from '@/src/context'
-import Header from '@/src/components/header'
+import Header from '@/src/components/Header'
 
 import CourseLayout from './course'
 import CoursesListLayout from './list'
