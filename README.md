@@ -1,36 +1,98 @@
-# Next.js with Bun runtime
+# Genesis Case
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with Bun.
+Case requirements defined [here](https://mixolydian-polonium-8c0.notion.site/Front-End-School-2-0-c0a2ae89311645e2bdd48b770868ba09).
 
 ## Getting Started
+
+> **Note:** To simplify local deployment file .env is removed from .gitignore
 
 ### Cloning the repo
 
 ```sh
-bun create next ./app
+git clone git@github.com:perhamik/genesis-case.git perhamik-genesis-case && cd perhamik-genesis-case
 ```
 
-First, run the development server:
+First, install dependencies and run development server:
 
 ```bash
-bun dev
+bun install && bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-## Learn More
+```bash
+src/
+│
+├─── api/
+│     └── index.ts #contains api requests and related methods
+│
+├─── components/
+│     │── CourseCard.tsx #includes RatingStars as sub-component, CourseCard is used on Home page
+│     │── Header.tsx
+│     └── PaginationCourse.tsx #navigation between pages on Home page
+│
+├─── context/
+│     └── index.tsx #App Context Provider
+│
+├─── layout/
+│     │── course.tsx #Course page
+│     │── index.tsx  #core layout (with context)
+│     └── list.tsx #used on Home page, contains Course Cards
+│
+├─── pages/
+│     │── course/
+│     │     └── [...id].tsx #dynamic route to catch all path
+│     │
+│     │── _app.tsx #custom App
+│     │── _document.tsx #custom Document
+│     │── 404.tsx #custom Error Page
+│     └── index.tsx #Home page
+│
+├─── types/
+│     │── api.ts #core types provided by the API
+│     └── index.ts #used for import from single point
+│
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## More info
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Project uses [Bun]() runtime. Bun ships as a single executable that can be installed a few different ways.
 
-## Deploy on Vercel
+Windows users — Bun does not currently provide a native Windows build. We're working on this; progress can be tracked at [this issue](https://github.com/oven-sh/bun/issues/43). In the meantime, use one of the installation methods below for Windows Subsystem for Linux.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Linux users — Kernel version 5.6 or higher is strongly recommended, but the minimum is 5.1.
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Native:
+
+```sh
+curl -fsSL https://bun.sh/install | bash
+```
+
+npm
+
+```sh
+npm install -g bun
+```
+
+Homebrew
+
+```sh
+brew tap oven-sh/bun # for macOS and Linux
+brew install bun
+```
+
+Docker
+
+```sh
+docker pull oven/bun
+docker run --rm --init --ulimit memlock=-1:-1 oven/bun
+```
+
+proto
+
+```sh
+proto install bun
+```
