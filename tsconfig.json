@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "es6",
+		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": false, // allow importing `.js` from `.ts`
 		"skipLibCheck": true,
-		"strict": true,
+		"strict": false,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"esModuleInterop": true, // allow default imports for CommonJS modules
@@ -18,8 +18,13 @@
 		"paths": {
 			"@/*": ["./*"]
 		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
 		"types": ["bun-types", "node", "react", "react-dom"]
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }
