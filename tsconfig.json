@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"lib": ["ESNext", "DOM"],
 		"allowJs": false, // allow importing `.js` from `.ts`
 		"skipLibCheck": true,
 		"strict": false,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"esModuleInterop": true, // allow default imports for CommonJS modules
-		"module": "esnext",
-		"moduleResolution": "nodenext",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
@@ -23,7 +23,7 @@
 				"name": "next"
 			}
 		],
-		"types": ["bun-types", "node", "react", "react-dom"]
+		"types": ["node", "react", "react-dom", "bun-types"]
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
