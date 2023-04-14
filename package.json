@@ -39,7 +39,12 @@
 		"dev:bun": "bun dev",
 		"build": "next build",
 		"lint": "next lint",
-		"typecheck": "tsc"
+		"typecheck": "tsc",
+		"docker:build": "docker build -t hw-1 .",
+		"docker:run": "docker run --name perhamik-case -dp 3000:3000 hw-1",
+		"docker:stop": "docker stop perhamik-case",
+		"docker:rm": "docker rm perhamik-case",
+		"docker": "yarn docker:build && yarn docker:run"
 	},
 	"config": {
 		"port": "3000"

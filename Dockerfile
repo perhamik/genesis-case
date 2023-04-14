@@ -5,9 +5,9 @@ WORKDIR /usr/app
 COPY . ./
 RUN yarn install
 
-RUN yarn build
-RUN yarn start
-
 EXPOSE 3000
+RUN yarn build
+CMD ["yarn", "start"]
+
 
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
