@@ -1,117 +1,120 @@
 import React from 'react'
-import {useLocalStorage, useInterval} from 'usehooks-ts'
-import {getPreviewWebp, getPreviewSet, transformDuration, getLessonPreviewWebp, getLessonPreviewSet} from '@/src/api'
-
 import {Container, Image, Row, Col, ListGroup} from 'react-bootstrap'
-import type {CourseSingleType, LessonType} from '@/src/types'
-import Hls from 'hls.js'
-import type {Events, ErrorData} from 'hls.js'
+import {useLocalStorage, useInterval, useEffectOnce} from 'usehooks-ts'
+import {getPreviewWebp, getPreviewSet, transformDuration} from '@/src/api'
+
 import {AppContext} from '@/src/context/index'
+import type {CourseSingleType, LessonType} from '@/src/types'
+import type {Events, ErrorData} from 'hls.js'
+
+import Hls from 'hls.js'
 
 type SavedType = {
 	lesson: string
-	time: string
+	offsetTime: string
 }
 
+const PLAYER_START_POSITION = 0.4
+
+const delay = (ms: number) =>
+	new Promise((resolve) => {
+		setTimeout(() => {
+			resolve(true)
+		}, ms)
+	})
+
+const delayedAction = (ms: number, func: Function) => delay(ms).then(() => func())
+
 export default function CourseLayout({data}: {data: CourseSingleType}) {
-	const [active, setActive] = React.useState<LessonType>()
-	const videoEl = React.useRef<HTMLVideoElement>(null) as React.MutableRefObject<HTMLVideoElement>
+	const videoRef = React.useRef<HTMLVideoElement>(null) as React.MutableRefObject<HTMLVideoElement>
 	const {hls, setHls} = React.useContext(AppContext)
-
 	const [currentCourseLesson, setCurrentCourseLesson] = useLocalStorage(data.id, '')
+	const [offsetTime, setOffsetTime] = React.useState(PLAYER_START_POSITION)
+	const [activeLesson, setActiveLesson] = React.useState<LessonType>()
 
-	const initHls = (hls: Hls | null, setter: React.Dispatch<React.SetStateAction<Hls | null>>, time: number) => {
-		if (hls || !videoEl) return
-		const _hls = new Hls({startPosition: time})
-		setter(() => _hls)
-	}
+	const setActiveLessonAndAppendVideo = (lesson: LessonType, time: number = PLAYER_START_POSITION) => {
+		let _hls = hls ? hls : new Hls({startPosition: time})
+		if (!lesson || !_hls) return
 
-	const appendVideo = (lesson?: LessonType, time = 0.4) => {
-		if (!hls) initHls(hls, setHls, time)
-		const current = lesson ? lesson : active
-		setTimeout(() => {
-			console.log(hls, current)
-			if (!hls || !current || lesson === active) return
-			setActive(() => lesson)
-			hls.off(Hls.Events.ERROR, HlsErrorHandler)
-			hls.off(Hls.Events.MEDIA_ATTACHED, () => hls.loadSource(current.link))
-			hls.on(Hls.Events.ERROR, HlsErrorHandler)
-			hls.on(Hls.Events.MEDIA_ATTACHED, () => hls.loadSource(current.link))
-
-			hls.attachMedia(videoEl.current)
-		}, 500)
-	}
-
-	const onListItemClick = (lesson: LessonType, time?: number) => {
-		initHls(hls, setHls, 0.4)
-
-		setTimeout(() => {
-			appendVideo(lesson, time)
-		}, 500)
-	}
-
-	const HlsErrorHandler = (event: Events.ERROR, data: ErrorData) => {
-		if (!hls) return
-
-		if (event === 'hlsError' && hls) {
-			hls.stopLoad()
-			hls.detachMedia()
+		if (offsetTime !== time) {
+			setOffsetTime(time)
 		}
 
-		if (data.fatal) {
-			switch (data.type) {
-				case Hls.ErrorTypes.NETWORK_ERROR:
-					// try to recover network error
-					console.log('fatal network error encountered, try to recover')
-					hls.startLoad()
-					break
-				case Hls.ErrorTypes.MEDIA_ERROR:
-					console.log('fatal media error encountered, try to recover')
-					hls.recoverMediaError()
-					break
-				default:
-					// cannot recover
-					hls.destroy()
-					break
+		setActiveLesson(() => lesson)
+
+		const HlsErrorHandler = (event: Events.ERROR, data: ErrorData) => {
+			if (!_hls) return
+
+			if (event === 'hlsError' && _hls) {
+				_hls.stopLoad()
+				_hls.detachMedia()
+			}
+
+			if (data.fatal) {
+				switch (data.type) {
+					case Hls.ErrorTypes.NETWORK_ERROR:
+						console.log('fatal network error encountered, try to recover')
+						_hls.startLoad()
+						break
+
+					case Hls.ErrorTypes.MEDIA_ERROR:
+						console.log('fatal media error encountered, try to recover')
+						_hls.recoverMediaError()
+						break
+
+					default:
+						_hls.destroy()
+						break
+				}
 			}
 		}
+
+		_hls && _hls.off(Hls.Events.ERROR, HlsErrorHandler)
+		_hls && _hls.off(Hls.Events.MEDIA_ATTACHED, () => _hls.loadSource(lesson.link))
+		_hls && _hls.on(Hls.Events.ERROR, HlsErrorHandler)
+		_hls && _hls.on(Hls.Events.MEDIA_ATTACHED, () => _hls.loadSource(lesson.link))
+
+		delayedAction(500, () => _hls && _hls.attachMedia(videoRef.current))
 	}
 
-	const saveCurrentProgress = () => {
-		const video = videoEl ? videoEl.current : null
-		const _lessonId = active ? active.id : ''
-		if (!video || !_lessonId) return
+	const onListItemClick = (lesson: LessonType) => {
+		setActiveLessonAndAppendVideo(lesson)
+	}
 
-		// @ts-ignore
-		const _time = video.currentTime ? Math.floor(video.currentTime) : 0
+	useEffectOnce(() => {
+		setHls(() => new Hls({startPosition: offsetTime}))
 
-		if (_time) {
-			setCurrentCourseLesson(() => JSON.stringify({lesson: _lessonId, time: _time}))
+		const haveWatchedThisCourse = () => {
+			if (!currentCourseLesson) return
+
+			const parsedCourse = JSON.parse(currentCourseLesson) as SavedType
+			const time = !isNaN(parseInt(parsedCourse.offsetTime)) ? parseInt(parsedCourse.offsetTime) : PLAYER_START_POSITION
+			const lesson = data.lessons.find((item) => item.id === parsedCourse.lesson)
+
+			if (lesson) {
+				setActiveLessonAndAppendVideo(lesson, time)
+			}
 		}
-	}
+
+		haveWatchedThisCourse()
+	})
 
 	useInterval(() => {
+		const saveCurrentProgress = () => {
+			const _id = activeLesson ? activeLesson.id : ''
+			const videoElement = videoRef ? videoRef.current : null
+			if (!videoElement || !_id) return
+
+			// @ts-ignore -- currentTime does not exist on type HTMLVideoElement
+			const _time = videoElement.currentTime ? Math.floor(videoElement.currentTime) : 0
+
+			if (_time > 2) {
+				setCurrentCourseLesson(() => JSON.stringify({lesson: _id, offsetTime: _time}))
+			}
+		}
+
 		saveCurrentProgress()
 	}, 5000)
-
-	React.useEffect(() => {
-		if (currentCourseLesson) {
-			const ifExist = JSON.parse(currentCourseLesson) as SavedType
-			const lesson = data.lessons.find((item) => item.id === ifExist.lesson)
-			if (lesson) {
-				onListItemClick(lesson, parseInt(ifExist.time))
-			}
-		}
-	}, [data])
-
-	React.useEffect(() => {
-		return () => {
-			if (hls) {
-				hls.destroy()
-			}
-			setHls(null)
-		}
-	}, [])
 
 	return (
 		<>
@@ -120,12 +123,10 @@ export default function CourseLayout({data}: {data: CourseSingleType}) {
 					<Row className="flex-lg-row-reverse align-items-center g-5">
 						<Col col={10} col-sm={8} col-lg={6}>
 							<Image
-								// didn't work correctly
-								// srcSet={active ? getLessonPreviewSet(active) : getPreviewSet(data.previewImageLink)}
-								// src={active ? getLessonPreviewWebp(active) : getPreviewWebp(data.previewImageLink)}
 								srcSet={getPreviewSet(data.previewImageLink)}
 								src={getPreviewWebp(data.previewImageLink)}
 								className="d-block mx-lg-auto img-fluid"
+								alt="Course Preview"
 							/>
 						</Col>
 						<Col col-lg={6}>
@@ -139,7 +140,7 @@ export default function CourseLayout({data}: {data: CourseSingleType}) {
 				<Row>
 					<Col sm={8}>
 						<video
-							ref={videoEl}
+							ref={videoRef}
 							controls
 							style={{maxWidth: '100%', display: 'flex', width: '100%', height: '100%', outline: 'none'}}
 						/>
@@ -150,7 +151,7 @@ export default function CourseLayout({data}: {data: CourseSingleType}) {
 								<ListGroup.Item
 									key={lesson.id}
 									as="button"
-									active={active && active.id === lesson.id}
+									active={activeLesson && activeLesson.id === lesson.id}
 									action
 									onClick={() => onListItemClick(lesson)}
 									className={`d-flex justify-content-between align-items-start ${
