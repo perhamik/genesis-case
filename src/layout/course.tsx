@@ -13,6 +13,17 @@ import {delayedAction, transformDuration} from '@/src/utils'
 
 const PLAYER_START_POSITION = 0.4
 
+const PLAYER_START_POSITION = 0.4
+
+const delay = (ms: number) =>
+	new Promise((resolve) => {
+		setTimeout(() => {
+			resolve(true)
+		}, ms)
+	})
+
+const delayedAction = (ms: number, func: Function) => delay(ms).then(() => func())
+
 export default function CourseLayout({data}: {data: CourseSingleType}) {
 	const videoRef = React.useRef<IVideoElement>(null)
 	const {hls, setHls} = React.useContext(AppContext)
