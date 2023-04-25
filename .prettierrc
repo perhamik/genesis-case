@@ -1,14 +1,16 @@
 {
-  "tabWidth": 3,
-  "useTabs": true,
-  "semi": false,
-  "singleQuote": true,
-  "printWidth": 130,
-  "quoteProps": "as-needed",
-  "proseWrap": "never",
-  "embeddedLanguageFormatting": "auto",
-  "bracketSpacing": false,
-  "trailingComma": "all",
-  "jsxBracketSameLine": true,
-  "htmlWhitespaceSensitivity": "ignore"
+	"tabWidth": 3,
+	"useTabs": true,
+	"semi": false,
+	"singleQuote": true,
+	"printWidth": 130,
+	"quoteProps": "as-needed",
+	"proseWrap": "never",
+	"embeddedLanguageFormatting": "auto",
+	"bracketSpacing": false,
+	"trailingComma": "all",
+	"htmlWhitespaceSensitivity": "ignore",
+	"importOrder": ["<THIRD_PARTY_MODULES>", "^@/src/components(.*)$", "^@/src(.*)$", "^@/public(.*)$", "^[./]"],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
 }

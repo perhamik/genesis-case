@@ -1,17 +1,16 @@
+import type Hls from 'hls.js'
 import React from 'react'
-import type {Dispatch, SetStateAction} from 'react'
-import Hls from 'hls.js'
 
 type ContextType = {
 	hls: Hls | null
-	setHls: Dispatch<SetStateAction<Hls | null>>
+	setHls: React.Dispatch<React.SetStateAction<Hls | null>>
 	currentPage: number
-	setCurrentPage: Dispatch<SetStateAction<number>>
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const AppContext = React.createContext<ContextType>({} as ContextType)
 
-export const ContextProvider = ({children}: {children: any}) => {
+export const ContextProvider = ({children}: {children: React.ReactNode}) => {
 	const [hls, setHls] = React.useState<null | Hls>(null)
 	const [currentPage, setCurrentPage] = React.useState(1)
 	const contextData = React.useMemo(

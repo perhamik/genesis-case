@@ -1,3 +1,5 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/_2xjYeZK)
+
 # Genesis Case
 
 Case requirements defined [here](https://mixolydian-polonium-8c0.notion.site/Front-End-School-2-0-c0a2ae89311645e2bdd48b770868ba09).
@@ -8,11 +10,28 @@ Case requirements defined [here](https://mixolydian-polonium-8c0.notion.site/Fro
 
 ### Cloning the repo
 
-```sh
-git clone git@github.com:perhamik/genesis-case.git perhamik-genesis-case && cd perhamik-genesis-case
+```bash
+git clone git@github.com:perhamik/genesis-case.git perhamik-genesis-case
+cd perhamik-genesis-case
 ```
 
-First, install dependencies and run development server:
+### Running locally
+
+#### Using docker:
+
+```bash
+docker build -t hw-1 . && docker run --name perhamik-case -dp 3000:3000 hw-1
+# OR through yarn
+yarn docker
+```
+
+#### Using yarn:
+
+```bash
+yarn install && yarn dev
+```
+
+#### Using Bun:
 
 ```bash
 bun install && bun run dev
@@ -57,7 +76,7 @@ src/
 
 ```
 
-## More info
+## About Bun
 
 Project uses [Bun]() runtime. Bun ships as a single executable that can be installed a few different ways.
 
@@ -65,33 +84,33 @@ Windows users — Bun does not currently provide a native Windows build. We're w
 
 Linux users — Kernel version 5.6 or higher is strongly recommended, but the minimum is 5.1.
 
-Native:
+### Native
 
 ```sh
 curl -fsSL https://bun.sh/install | bash
 ```
 
-npm
+### npm
 
 ```sh
 npm install -g bun
 ```
 
-Homebrew
+### Homebrew
 
 ```sh
 brew tap oven-sh/bun # for macOS and Linux
 brew install bun
 ```
 
-Docker
+### Docker
 
 ```sh
 docker pull oven/bun
 docker run --rm --init --ulimit memlock=-1:-1 oven/bun
 ```
 
-proto
+### proto
 
 ```sh
 proto install bun

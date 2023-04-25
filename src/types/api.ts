@@ -40,3 +40,8 @@ export type CourseSingleType = {
 	lessons: Array<LessonType>
 	containsLockedLessons: boolean
 } & CourseType
+
+export type SavedCourseInfoType = {
+	lesson: string
+	offsetTime: string
+}

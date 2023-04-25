@@ -1,6 +1,6 @@
-import React from 'react'
-import Document, {Html, Head, Main, NextScript} from 'next/document'
 import * as dotenv from 'dotenv'
+import Document, {Head, Html, Main, NextScript} from 'next/document'
+import React from 'react'
 
 const dotenvRes = dotenv.config()
 
@@ -22,7 +22,8 @@ class AppDocument extends Document {
 					/>
 					<link
 						rel="stylesheet"
-						href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.min.css"></link>
+						href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.min.css"
+					></link>
 				</Head>
 				<body>
 					<Main />

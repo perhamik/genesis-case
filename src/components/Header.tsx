@@ -2,7 +2,6 @@ import React from 'react'
 import {Container, Navbar} from 'react-bootstrap'
 
 export default function Header() {
-	// const {token, setToken} = React.useContext(AppContext)
 	return (
 		<header>
 			<Navbar bg="dark" variant="dark">

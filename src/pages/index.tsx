@@ -1,8 +1,9 @@
-import React from 'react'
+import type {GetServerSideProps} from 'next'
 import Head from 'next/head'
-import {GetServerSideProps} from 'next'
+import React from 'react'
+
 import Layout, {CoursesListLayout} from '@/src/layout'
-import {getCoursesList} from '@/src/api'
+import {getCoursesList} from '@/src/services'
 import type {CourseType} from '@/src/types'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

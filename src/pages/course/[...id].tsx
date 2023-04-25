@@ -1,9 +1,9 @@
-import React from 'react'
+import type {GetServerSideProps, GetServerSidePropsContext} from 'next'
 import Head from 'next/head'
-import Layout, {CourseLayout} from '@/src/layout'
-import {GetServerSideProps, GetServerSidePropsContext} from 'next'
-import {getCourseInfo, checkLessonsAccess} from '@/src/api'
+import React from 'react'
 
+import Layout, {CourseLayout} from '@/src/layout'
+import {checkLessonsAccess, getCourseInfo} from '@/src/services'
 import type {CourseSingleType} from '@/src/types'
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -16,18 +16,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
 export default function CoursePage({data}: {data: CourseSingleType}) {
 	const [course, setCourse] = React.useState<CourseSingleType>(data)
+
 	React.useEffect(() => {
 		const availables = checkLessonsAccess(data.lessons)
+
 		availables.then((status) => {
-			const _lessons = course.lessons.map((lesson, id) => {
+			const lessons = course.lessons.map((lesson, id) => {
 				lesson.available = status.at(id) === 200
 				return lesson
 			})
 
-			setCourse({
-				...course,
-				lessons: _lessons,
-			})
+			setCourse({...course, lessons})
 		})
 	}, [])
 

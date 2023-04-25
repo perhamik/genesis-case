@@ -1,38 +1,34 @@
 import React from 'react'
-import {AppContext} from '@/src/context/index'
 import {Pagination} from 'react-bootstrap'
 
-type PaginationType = {
-	totalCount: number
-	pageSize: number
-}
+import {AppContext} from '@/src/context/index'
 
-const PaginationCourses = (props: PaginationType) => {
+const preparePaginationArray = (size: number) => Array.from(Array(size).keys())
+
+const PaginationCourses = ({totalCount, pageSize}: {totalCount: number; pageSize: number}) => {
 	const {currentPage, setCurrentPage} = React.useContext(AppContext)
-	const pagesLength = Math.ceil(props.totalCount / props.pageSize)
+	const pagesLength = Math.ceil(totalCount / pageSize)
 
-	const onPageClick = (page: number) => {
-		const _page = pagesLength >= page ? (page > 0 ? page : 1) : pagesLength
-		setCurrentPage(_page)
+	const onPageNumberClick = (page: number) => {
+		setCurrentPage(() => (page > pagesLength ? pagesLength : page))
 	}
 
 	return (
 		<Pagination className="justify-content-center">
-			<Pagination.Prev onClick={() => onPageClick(currentPage - 1)} />
-			{Array(pagesLength)
-				.fill(1)
-				.map((_, id) => {
-					return (
-						<Pagination.Item
-							active={id + 1 === currentPage}
-							key={`pagination_item_${id}`}
-							onClick={() => onPageClick(id + 1)}>
-							{id + 1}
-						</Pagination.Item>
-					)
-				})}
+			<Pagination.Prev disabled={currentPage <= 1} onClick={() => setCurrentPage((prev) => prev - 1)} />
+			{preparePaginationArray(pagesLength).map((i) => {
+				return (
+					<Pagination.Item
+						key={`pagination_item_${i}`}
+						active={i + 1 === currentPage}
+						onClick={() => onPageNumberClick(i + 1)}
+					>
+						{i + 1}
+					</Pagination.Item>
+				)
+			})}
 
-			<Pagination.Next onClick={() => onPageClick(currentPage + 1)} />
+			<Pagination.Next disabled={currentPage >= pagesLength} onClick={() => setCurrentPage((prev) => prev + 1)} />
 		</Pagination>
 	)
 }
