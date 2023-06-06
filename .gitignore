@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 .github
@@ -17,6 +17,7 @@ bun.lockb
 /build
 
 # misc
+.vscode
 .DS_Store
 *.pem
 *.tsbuildinfo

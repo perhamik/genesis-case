@@ -1,30 +1,24 @@
 {
+	"extends": "./tsconfig.web.json",
+
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"lib": ["ESNext", "DOM"],
-		"allowJs": false, // allow importing `.js` from `.ts`
-		"skipLibCheck": true,
-		"strict": false,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true, // allow default imports for CommonJS modules
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
+		"target": "es5",
+		"module": "esnext",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"moduleResolution": "node",
+		"composite": true,
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["./*"]
 		},
+
 		"plugins": [
 			{
 				"name": "next"
 			}
 		],
-		"types": ["node", "react", "react-dom", "bun-types"]
+		"types": ["vitest/importMeta", "vitest/globals"]
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+	"include": ["next-env.d.ts", "global.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }

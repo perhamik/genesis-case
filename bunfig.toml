@@ -1,5 +1,0 @@
-framework = "next"
-logLevel = "debug"
-
-[dev]
-port = 3000

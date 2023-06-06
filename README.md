@@ -20,7 +20,7 @@ cd perhamik-genesis-case
 #### Using docker:
 
 ```bash
-docker build -t hw-1 . && docker run --name perhamik-case -dp 3000:3000 hw-1
+docker build -t hw-1 . && docker run --name perhamik-case -dp 3000:3000 hw-3
 # OR through yarn
 yarn docker
 ```
@@ -31,87 +31,115 @@ yarn docker
 yarn install && yarn dev
 ```
 
-#### Using Bun:
-
-```bash
-bun install && bun run dev
-```
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Project structure
 
 ```bash
-src/
 │
-├─── api/
-│     └── index.ts #contains api requests and related methods
-│
-├─── components/
-│     │── CourseCard.tsx #includes RatingStars as sub-component, CourseCard is used on Home page
-│     │── Header.tsx
-│     └── PaginationCourse.tsx #navigation between pages on Home page
-│
-├─── context/
-│     └── index.tsx #App Context Provider
-│
-├─── layout/
-│     │── course.tsx #Course page
-│     │── index.tsx  #core layout (with context)
-│     └── list.tsx #used on Home page, contains Course Cards
-│
-├─── pages/
-│     │── course/
-│     │     └── [...id].tsx #dynamic route to catch all path
+├─── app/ # as pages routing Next.js 13 feature
+│     │──── course/
+│     │       └──[id]/
+│     │            │── page.tsx # Course page content
+│     │            └── Single.tsx # Single course component
 │     │
-│     │── _app.tsx #custom App
-│     │── _document.tsx #custom Document
-│     │── 404.tsx #custom Error Page
-│     └── index.tsx #Home page
+│     │── layout.tsx # Home page layout
+│     │── loading.tsx # Home page loading content (layout children)
+│     │── not-found.tsx # 404 page
+│     └── page.tsx # Home page content
 │
-├─── types/
-│     │── api.ts #core types provided by the API
-│     └── index.ts #used for import from single point
+├─── features/
+│     │── Course
+│     │       │── Item
+│     │       │    │─── ItemStats
+│     │       │    │      │─── index.tsx  # display tags, additional info and rating
+│     │       │    │      └─── Rating.tsx # rating component
+│     │       │    │
+│     │       │    │─── index.tsx
+│     │       │    └─── ItemImage.tsx # preview of course
+│     │       │
+│     │       │
+│     │       │── List/index.tsx # represents displaying list of courses
+│     │       │
+│     │       └── index.tsx
+│     │
+│     │── Header
+│     │     └── index.tsx
+│     │
+│     └─── Lesson
+│           │── Info/index.tsx
+│           │
+│           │── List/index.tsx # list of lessons in course
+│           │
+│           │── Video/index.tsx
+│           │
+│           │── context.tsx # local context for Lesson Component
+│           │── index.tsx # entry point
+│           └── utils.ts # local helpers
 │
+│
+├─── processes/
+│     │── course.tsx
+│     │── home.tsx
+│     └── middleware.tsx
+│
+├─── shared/
+│     │── api/
+│     │    │── external.ts # interaction with external API
+│     │    │── index.ts
+│     │    │── types.ts
+│     │    └── utils.ts # local helpers
+│     │
+│     │── config/
+│     │    │── consts.ts
+│     │    └── index.ts
+│     │
+│     │── lib/
+│     │    │── delay.ts
+│     │    │── fetch.ts
+│     │    │── index.ts
+│     │    │── previews.ts
+│     │    └── timeTransform.ts
+│     │
+│     │── themes/ # featured soon
+│     │
+│     └── ui/
+│          │── Card/  # Card component
+│          │    │── CardBody.tsx
+│          │    │── CardImg.tsx
+│          │    │── CardText.tsx
+│          │    │── CardTitle.tsx
+│          │    │── index.tsx
+│          │    └── styles.module.scss
+│          │
+│          │── helpers/ # style helpers
+│          │    │── reset.scss
+│          │    └── index.scss
+│          │
+│          │── ListGroup/
+│          │    │── index.tsx
+│          │    └── ListGroupItem.tsx
+│          │
+│          │── Navbar/
+│          │    │── index.tsx
+│          │    └── NavbarBrand.tsx
+│          │
+│          │── Badge.tsx
+│          │── Container.tsx
+│          │── global.scss
+│          │── index.ts
+│          │── Layout.tsx
+│          │── types.ts
+│          └── utils.ts
+│
+└──── middleware.ts
 
 ```
 
-## About Bun
+### Architecture
 
-Project uses [Bun]() runtime. Bun ships as a single executable that can be installed a few different ways.
+![dependencygraph-detailed.svg](dependencygraph-detailed.svg)
 
-Windows users — Bun does not currently provide a native Windows build. We're working on this; progress can be tracked at [this issue](https://github.com/oven-sh/bun/issues/43). In the meantime, use one of the installation methods below for Windows Subsystem for Linux.
+#### Simplified
 
-Linux users — Kernel version 5.6 or higher is strongly recommended, but the minimum is 5.1.
-
-### Native
-
-```sh
-curl -fsSL https://bun.sh/install | bash
-```
-
-### npm
-
-```sh
-npm install -g bun
-```
-
-### Homebrew
-
-```sh
-brew tap oven-sh/bun # for macOS and Linux
-brew install bun
-```
-
-### Docker
-
-```sh
-docker pull oven/bun
-docker run --rm --init --ulimit memlock=-1:-1 oven/bun
-```
-
-### proto
-
-```sh
-proto install bun
-```
+![dependencygraph.svg](dependencygraph.svg)
