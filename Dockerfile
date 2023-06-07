@@ -3,10 +3,11 @@ RUN apk update && apk upgrade
 WORKDIR /usr/app
 
 COPY . ./
-RUN yarn build
+RUN npm install
+RUN npm run build
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["npm", "run", "start"]
 
 
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
