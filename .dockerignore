@@ -1,4 +1,5 @@
 # dependencies
+node_modules
 /.pnp
 .pnp.js
 .github
@@ -41,4 +42,6 @@ yarn-error.log*
 **/*.tar.gz
 **/*.tgz
 **/*.log
+package-lock.json
+yarn.lock
 **/*.bun
