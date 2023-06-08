@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Execute tests
-      run: npx vitest
+      run: npm ci && npm run test
