@@ -39,10 +39,10 @@
 	"scripts": {
 		"start": "next start",
 		"dev": "next dev",
+		"format": "prettier --write .",
+		"lint": "tsc && next lint",
+		"prebuild": "yarn format && yarn lint",
 		"build": "next build",
-		"pretty": "prettier --write .",
-		"lint": "next lint",
-		"typecheck": "tsc",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
 		"architecture": "depcruise --config --include-only \"^src\" --output-type dot src | dot -T svg > dependencygraph.svg",

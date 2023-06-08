@@ -12,5 +12,6 @@ export default defineConfig({
 	test: {
 		environment: 'jsdom',
 		includeSource: ['src/**/*.{ts,tsx}'],
+		exclude: ['__tests__/**/*.{ts,tsx}', '.next', 'node_modules', 'public'],
 	},
 })
